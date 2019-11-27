@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Playball&display=swap" rel="stylesheet">
+  <title>Canvas King</title>
+  <style>
+      html, body {
+        margin: 0;
+        font-family:'Playball', cursive;
+      }
+      .canvas-wrapper {
+        display: flex;
+        justify-content: center;
+      }
+      canvas {
+        border: 1px solid black;
+      }
+      
+      .heading-wrapper {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+      }
+
+      h1 {
+        color: #002255ff;
+      }
+      .color-picker {
+        margin: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-gap: 15px;
+      }
+
+      .color-picker a {
+        width: 100px;
+        cursor: pointer;
+        text-align: center;
+        border-radius: 5px;
+        color: whitesmoke;
+      }
+
+      .color__red{
+        background-color: #ff0000;
+      }
+      .color__blue{
+        background-color: #0000ff;
+      }
+      .color__green{
+        background-color: #00ff00;
+      }
+      .color__yellow{
+        background-color: #ffff00;
+      }
+      .color__orange {
+        background-color: #FFA500;
+      }
+      .color__pink {
+        background-color: #ff00ff;
+      }
+      .color__purple{
+        background-color: #8A2BE2;
+      }
+      .color__black{
+        background-color: #000000;
+      }
+      .color__grey{
+        background-color: #808080;
+      }
+      .color__brown{
+        background-color: #8B4513;
+      }
+
+
+
+  </style>
+</head>
+<body>
+  <div class="app-wrapper">
+    <div class="heading-wrapper">
+      <div class="heading-title">
+        <h1>Canvas King</h1>
+      </div>  
+      <div class="color-picker">
+        <a class="color__red" >Red</a>
+        <a class="color__blue">Blue</a>
+        <a class="color__green">Green</a>
+        <a class="color__yellow">Yellow</a>
+        <a class="color__orange">Orange</a>
+        <a class="color__pink">Pink</a>
+        <a class="color__purple">Purple</a>
+        <a class="color__black">Black</a>
+        <a class="color__grey">Grey</a>
+        <a class="color__brown">Brown</a>
+      </div>
+      
+    </div>
+
+    <div class="canvas-wrapper">
+      <canvas id="draw" width="1800" height="825"></canvas>
+    </div>
+  </div>
+</body>
+<script>
+  const colors = document.querySelectorAll('a');
+  const canvas = document.getElementById('draw');
+  const context = canvas.getContext('2d');
+
+
+  canvas.width = window.innerWidth;
+  context.strokeStyle = 'blue';
+  context.lineJoin = 'round';
+  context.lineCap = 'round';
+  context.lineWidth = 50;
+
+
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+
+  const colorPickerOptions = {
+    red: "#ff0000",
+    blue: "#0000ff",
+    green: "#00ff00",
+    yellow: "#ffff00",
+    orange: "#FFA500",
+    pink: "#ff00ff",
+    purple: "#8A2BE2",
+    black: "#000000",
+    grey: "#808080",
+    brown: "#8B4513"
+  }
+
+  function draw(e) {
+    if(!isDrawing) return;
+    context.beginPath();
+    context.moveTo(lastX, lastY);
+    context.lineTo(e.offsetX, e.offsetY);
+    context.stroke();
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+  }
+
+  function changeColor(e) {
+    const selectedColor = e.target.innerHTML;
+    context.strokeStyle = selectedColor;
+  }
+
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+
+  });
+  canvas.addEventListener('mouseup', () => {
+    isDrawing = false;
+  });
+  canvas.addEventListener('mouseout', () => {
+    isDrawing = false;
+  });
+
+
+  colors.forEach((color) => {
+    color.addEventListener('click', changeColor)
+  })
+
+</script>
+
+
+</html>
